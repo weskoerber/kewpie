@@ -38,7 +38,7 @@ A simple query string parser for zig.
         var gpa = std.heap.GeneralPurposeAllocator(.{}){};
         defer if (gpa.deinit() != .ok) @panic("leak");
 
-        const uri = std.Uri.parse("https://example.com?hello=world");
+        const uri = try std.Uri.parse("https://example.com?hello=world");
 
         const query_params = try kewpie.parse(gpa.allocator(), uri);
         defer query_params.deinit();
@@ -57,7 +57,7 @@ A simple query string parser for zig.
     const kewpie = @import("kewpie");
 
     pub fn main() !void {
-        const uri = std.Uri.parse("https://example.com?hello=world");
+        const uri = try std.Uri.parse("https://example.com?hello=world");
 
         var query_params = try kewpie.iter(uri);
         while (query_params.next()) |param| {
