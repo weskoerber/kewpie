@@ -2,7 +2,6 @@ const std = @import("std");
 const testing = std.testing;
 
 const GeneralPurposeAllocator = std.heap.GeneralPurposeAllocator;
-const StringHashMap = std.StringHashMap;
 const Uri = std.Uri;
 
 const kewpie = @import("kewpie");
