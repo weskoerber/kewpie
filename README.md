@@ -59,7 +59,7 @@ A simple query string parser for zig.
     pub fn main() !void {
         const uri = try std.Uri.parse("https://example.com?hello=world");
 
-        var query_params = try kewpie.iter(uri);
+        var query_params = kewpie.iter(uri);
         while (query_params.next()) |param| {
             // `param` holds a QueryParam struct
             // ...
