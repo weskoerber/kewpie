@@ -54,6 +54,7 @@ A simple query string parser for zig.
 
     ```zig
     const std = @import("std");
+    const kewpie = @import("kewpie");
 
     pub fn main() !void {
         const uri = std.Uri.parse("https://example.com?hello=world");
