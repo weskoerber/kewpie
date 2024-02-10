@@ -5,11 +5,7 @@ const Allocator = std.mem.Allocator;
 const StringHashMap = std.StringHashMap;
 const Uri = std.Uri;
 
-const ParseError = error{
-    Invalid,
-};
-
-pub fn parse(ally: Allocator, uri: Uri) !StringHashMap([]const u8) {
+pub fn parse(ally: Allocator, uri: Uri) Allocator.Error!StringHashMap([]const u8) {
     var parsed = StringHashMap([]const u8).init(ally);
 
     const query = uri.query orelse return parsed;
