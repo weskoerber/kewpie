@@ -25,3 +25,37 @@ A simple query string parser for zig.
     });
     exe.root_module.addImport("kewpie", kewpie.module("kewpie"));
     ```
+
+### Usage
+
+- Parse entire query string into a hash map
+
+    ```zig
+    const std = @import("std");
+    const kewpie = @import("kewpie");
+
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer if (gpa.deinit() != .ok) @panic("leak");
+
+    const uri = std.Uri.parse("https://example.com?hello=world");
+
+    const query_params = try kewpie.parse(gpa.allocator(), uri);
+    defer query_params.deinit();
+
+    if (query_params.get("hello")) |value| {
+        // `value` holds the value `world`
+        // ...
+    }
+    ```
+
+- Parse the query string into an iterator
+
+    ```zig
+    const uri = std.Uri.parse("https://example.com?hello=world");
+
+    var query_params = try kewpie.iter(uri);
+    while (query_params.next()) |param| {
+        // `param` holds a QueryParam struct
+        // ...
+    }
+    ```
