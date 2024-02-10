@@ -34,28 +34,34 @@ A simple query string parser for zig.
     const std = @import("std");
     const kewpie = @import("kewpie");
 
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
+    pub fn main() !void {
+        var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+        defer if (gpa.deinit() != .ok) @panic("leak");
 
-    const uri = std.Uri.parse("https://example.com?hello=world");
+        const uri = std.Uri.parse("https://example.com?hello=world");
 
-    const query_params = try kewpie.parse(gpa.allocator(), uri);
-    defer query_params.deinit();
+        const query_params = try kewpie.parse(gpa.allocator(), uri);
+        defer query_params.deinit();
 
-    if (query_params.get("hello")) |value| {
-        // `value` holds the value `world`
-        // ...
+        if (query_params.get("hello")) |value| {
+            // `value` holds the value `world`
+            // ...
+        }
     }
     ```
 
 - Parse the query string into an iterator
 
     ```zig
-    const uri = std.Uri.parse("https://example.com?hello=world");
+    const std = @import("std");
 
-    var query_params = try kewpie.iter(uri);
-    while (query_params.next()) |param| {
-        // `param` holds a QueryParam struct
-        // ...
+    pub fn main() !void {
+        const uri = std.Uri.parse("https://example.com?hello=world");
+
+        var query_params = try kewpie.iter(uri);
+        while (query_params.next()) |param| {
+            // `param` holds a QueryParam struct
+            // ...
+        }
     }
     ```
