@@ -158,3 +158,54 @@ test "path_and_query_only" {
     try testing.expectEqual(1, parsed.count());
     try testing.expectEqualStrings("chad", parsed.get("name").?);
 }
+
+test "iterator_1" {
+    const uri = try Uri.parse("https://example.com?hello=world");
+    var it = kewpie.QueryParamIterator.iter(uri);
+
+    try testing.expect(it.next() != null);
+}
+
+test "iterator_many" {
+    const uri = try Uri.parse("http://example.com?hello=world&name=chad&num=420");
+    var it = kewpie.QueryParamIterator.iter(uri);
+
+    var field = it.next().?;
+    try testing.expectEqualStrings("hello", field.name);
+    try testing.expectEqualStrings("world", field.value);
+
+    field = it.next().?;
+    try testing.expectEqualStrings("name", field.name);
+    try testing.expectEqualStrings("chad", field.value);
+
+    field = it.next().?;
+    try testing.expectEqualStrings("num", field.name);
+    try testing.expectEqualStrings("420", field.value);
+}
+
+test "iterator_peek" {
+    const uri = try Uri.parse("http://example.com?hello=world&name=chad&num=420");
+    var it = kewpie.QueryParamIterator.iter(uri);
+
+    var field = it.next().?;
+    try testing.expectEqualStrings("hello", field.name);
+    try testing.expectEqualStrings("world", field.value);
+
+    field = it.peek().?;
+    try testing.expectEqualStrings("name", field.name);
+    try testing.expectEqualStrings("chad", field.value);
+
+    field = it.next().?;
+    try testing.expectEqualStrings("name", field.name);
+    try testing.expectEqualStrings("chad", field.value);
+
+    field = it.next().?;
+    try testing.expectEqualStrings("num", field.name);
+    try testing.expectEqualStrings("420", field.value);
+}
+
+comptime {
+    testing.refAllDecls(@This());
+    testing.refAllDecls(kewpie.QueryParams);
+    testing.refAllDecls(kewpie.QueryParamIterator);
+}
