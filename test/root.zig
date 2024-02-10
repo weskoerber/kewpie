@@ -204,6 +204,23 @@ test "iterator_peek" {
     try testing.expectEqualStrings("420", field.value);
 }
 
+test "iterator_many_with_invalid" {
+    const uri = try Uri.parse("http://example.com?hello=world&name=&num=420");
+    var it = kewpie.iter(uri);
+
+    var field = it.next().?;
+    try testing.expectEqualStrings("hello", field.name);
+    try testing.expectEqualStrings("world", field.value);
+
+    field = it.next().?;
+    try testing.expectEqualStrings("name", field.name);
+    try testing.expectEqualStrings("", field.value);
+
+    field = it.next().?;
+    try testing.expectEqualStrings("num", field.name);
+    try testing.expectEqualStrings("420", field.value);
+}
+
 comptime {
     testing.refAllDecls(@This());
     testing.refAllDecls(kewpie);
