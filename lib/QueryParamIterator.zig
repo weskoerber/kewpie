@@ -1,11 +1,5 @@
 inner_iterator: TokenIterator(u8, .scalar),
 
-pub fn iter(uri: Uri) Self {
-    return .{
-        .inner_iterator = std.mem.tokenizeScalar(u8, uri.query orelse "", '&'),
-    };
-}
-
 pub fn next(self: *Self) ?QueryParam {
     const field = self.inner_iterator.next() orelse return null;
 

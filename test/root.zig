@@ -13,7 +13,7 @@ test "layup" {
 
     const uri = try Uri.parse("http://example.com?hello=world");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
@@ -27,7 +27,7 @@ test "multiple" {
 
     const uri = try Uri.parse("http://example.com?hello=world&name=chad&num=420");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(3, parsed.count());
@@ -43,7 +43,7 @@ test "none" {
 
     const uri = try Uri.parse("http://example.com?");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(0, parsed.count());
@@ -56,7 +56,7 @@ test "not_a_query_param" {
 
     const uri = try Uri.parse("http://example.com?test");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(0, parsed.count());
@@ -69,7 +69,7 @@ test "no_value" {
 
     const uri = try Uri.parse("http://example.com?test=");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
@@ -83,7 +83,7 @@ test "no_value_with_multiple" {
 
     const uri = try Uri.parse("http://example.com?test=&name=chad");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(2, parsed.count());
@@ -98,7 +98,7 @@ test "trailing_ampersand" {
 
     const uri = try Uri.parse("http://example.com?test=&");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
@@ -112,7 +112,7 @@ test "ampersand_only" {
 
     const uri = try Uri.parse("http://example.com?&");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(0, parsed.count());
@@ -125,7 +125,7 @@ test "empty" {
 
     const uri = try Uri.parse("http://example.com");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(0, parsed.count());
@@ -138,7 +138,7 @@ test "without_scheme" {
 
     const uri = try Uri.parseWithoutScheme("test.com/?name=chad");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
@@ -152,7 +152,7 @@ test "path_and_query_only" {
 
     const uri = try Uri.parseWithoutScheme("/?name=chad");
 
-    var parsed = try kewpie.QueryParams.parse(ally, uri);
+    var parsed = try kewpie.parse(ally, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
@@ -161,14 +161,14 @@ test "path_and_query_only" {
 
 test "iterator_1" {
     const uri = try Uri.parse("https://example.com?hello=world");
-    var it = kewpie.QueryParamIterator.iter(uri);
+    var it = kewpie.iter(uri);
 
     try testing.expect(it.next() != null);
 }
 
 test "iterator_many" {
     const uri = try Uri.parse("http://example.com?hello=world&name=chad&num=420");
-    var it = kewpie.QueryParamIterator.iter(uri);
+    var it = kewpie.iter(uri);
 
     var field = it.next().?;
     try testing.expectEqualStrings("hello", field.name);
@@ -185,7 +185,7 @@ test "iterator_many" {
 
 test "iterator_peek" {
     const uri = try Uri.parse("http://example.com?hello=world&name=chad&num=420");
-    var it = kewpie.QueryParamIterator.iter(uri);
+    var it = kewpie.iter(uri);
 
     var field = it.next().?;
     try testing.expectEqualStrings("hello", field.name);
@@ -206,6 +206,6 @@ test "iterator_peek" {
 
 comptime {
     testing.refAllDecls(@This());
-    testing.refAllDecls(kewpie.QueryParams);
+    testing.refAllDecls(kewpie);
     testing.refAllDecls(kewpie.QueryParamIterator);
 }
