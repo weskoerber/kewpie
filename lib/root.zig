@@ -12,9 +12,9 @@ pub fn parse(ally: Allocator, uri: Uri) Allocator.Error!StringHashMap([]const u8
 
     const query = uri.query orelse return parsed;
 
-    var params = mem.tokenizeSequence(u8, query, "&");
+    var params = mem.tokenizeScalar(u8, query, '&');
     while (params.next()) |param| {
-        var field = mem.splitSequence(u8, param, "=");
+        var field = mem.splitScalar(u8, param, '=');
 
         const key = field.first();
         const value = field.next();
