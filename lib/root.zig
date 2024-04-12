@@ -10,7 +10,10 @@ pub const QueryParamIterator = @import("QueryParamIterator.zig");
 pub fn parse(ally: Allocator, uri: Uri) Allocator.Error!StringHashMap([]const u8) {
     var parsed = StringHashMap([]const u8).init(ally);
 
-    const query = uri.query orelse return parsed;
+    const query = if (uri.query) |query| switch (query) {
+        .raw => query.raw,
+        .percent_encoded => query.percent_encoded,
+    } else return parsed;
 
     var params = mem.tokenizeScalar(u8, query, '&');
     while (params.next()) |param| {
@@ -30,7 +33,12 @@ pub fn parse(ally: Allocator, uri: Uri) Allocator.Error!StringHashMap([]const u8
 }
 
 pub fn iter(uri: Uri) QueryParamIterator {
+    const query = if (uri.query) |query| switch (query) {
+        .raw => query.raw,
+        .percent_encoded => query.percent_encoded,
+    } else "";
+
     return .{
-        .inner_iterator = std.mem.tokenizeScalar(u8, uri.query orelse "", '&'),
+        .inner_iterator = std.mem.tokenizeScalar(u8, query, '&'),
     };
 }

@@ -95,7 +95,7 @@ test "empty" {
 }
 
 test "without_scheme" {
-    const uri = try Uri.parseWithoutScheme("test.com/?name=chad");
+    const uri = try Uri.parseAfterScheme("", "test.com/?name=chad");
 
     var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
@@ -105,7 +105,7 @@ test "without_scheme" {
 }
 
 test "path_and_query_only" {
-    const uri = try Uri.parseWithoutScheme("/?name=chad");
+    const uri = try Uri.parseAfterScheme("", "/?name=chad");
 
     var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
