@@ -1,19 +1,14 @@
 const std = @import("std");
 const testing = std.testing;
 
-const GeneralPurposeAllocator = std.heap.GeneralPurposeAllocator;
 const Uri = std.Uri;
 
 const kewpie = @import("kewpie");
 
 test "layup" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parse("http://example.com?hello=world");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
@@ -21,13 +16,9 @@ test "layup" {
 }
 
 test "multiple" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parse("http://example.com?hello=world&name=chad&num=420");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(3, parsed.count());
@@ -37,39 +28,27 @@ test "multiple" {
 }
 
 test "none" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parse("http://example.com?");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(0, parsed.count());
 }
 
 test "not_a_query_param" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parse("http://example.com?test");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(0, parsed.count());
 }
 
 test "no_value" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parse("http://example.com?test=");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
@@ -77,13 +56,9 @@ test "no_value" {
 }
 
 test "no_value_with_multiple" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parse("http://example.com?test=&name=chad");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(2, parsed.count());
@@ -92,13 +67,9 @@ test "no_value_with_multiple" {
 }
 
 test "trailing_ampersand" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parse("http://example.com?test=&");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
@@ -106,39 +77,27 @@ test "trailing_ampersand" {
 }
 
 test "ampersand_only" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parse("http://example.com?&");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(0, parsed.count());
 }
 
 test "empty" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parse("http://example.com");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(0, parsed.count());
 }
 
 test "without_scheme" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parseWithoutScheme("test.com/?name=chad");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
@@ -146,13 +105,9 @@ test "without_scheme" {
 }
 
 test "path_and_query_only" {
-    var gpa = GeneralPurposeAllocator(.{}){};
-    defer if (gpa.deinit() != .ok) @panic("leak");
-    const ally = gpa.allocator();
-
     const uri = try Uri.parseWithoutScheme("/?name=chad");
 
-    var parsed = try kewpie.parse(ally, uri);
+    var parsed = try kewpie.parse(testing.allocator, uri);
     defer parsed.deinit();
 
     try testing.expectEqual(1, parsed.count());
