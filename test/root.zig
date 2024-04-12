@@ -176,6 +176,15 @@ test "iterator_many_with_invalid" {
     try testing.expectEqualStrings("420", field.value);
 }
 
+test "unescaped_spaces" {
+    const uri = try Uri.parse("http://example.com?text=hello world");
+    var h = try kewpie.parse(testing.allocator, uri);
+    defer h.deinit();
+    const value = h.get("text");
+
+    try testing.expectEqualStrings("hello world", value.?);
+}
+
 comptime {
     testing.refAllDecls(@This());
     testing.refAllDecls(kewpie);
