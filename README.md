@@ -13,7 +13,7 @@ A simple query string parser for zig.
 1. Add kewpie as a dependency in your project using Zig's package manager
 
     ```console
-    zig fetch --save git+https://github.com/weskoerber/kewpie.git#main
+    zig fetch --save git+https://github.com/weskoerber/kewpie.git#0.1.1
     ```
 
 2. Add kewpie module to your `build.zig`
