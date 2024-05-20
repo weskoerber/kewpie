@@ -6,7 +6,7 @@ A simple query string parser for zig.
 
 ### Prerequisites
 
-- [zig](https://ziglang.org/download) (master)
+- [zig](https://ziglang.org/download) (`0.12.0` or newer)
 
 ### Installation
 
