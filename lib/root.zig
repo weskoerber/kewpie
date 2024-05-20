@@ -7,6 +7,9 @@ const Uri = std.Uri;
 
 pub const QueryParamIterator = @import("QueryParamIterator.zig");
 
+/// Takes a `Uri` and attempts to parse the query parameter part into a
+/// `StringHashMap`. This function allocates the hash map, so the caller must
+/// free the returned memory after use.
 pub fn parse(ally: Allocator, uri: Uri) Allocator.Error!StringHashMap([]const u8) {
     var parsed = StringHashMap([]const u8).init(ally);
 
@@ -32,6 +35,7 @@ pub fn parse(ally: Allocator, uri: Uri) Allocator.Error!StringHashMap([]const u8
     return parsed;
 }
 
+/// Takes a `Uri` and returns a `QueryParamIterator`.
 pub fn iter(uri: Uri) QueryParamIterator {
     const query = if (uri.query) |query| switch (query) {
         .raw => query.raw,
