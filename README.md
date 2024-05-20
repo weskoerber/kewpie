@@ -1,3 +1,6 @@
+[![test](https://github.com/weskoerber/kewpie/actions/workflows/test.yaml/badge.svg)](https://github.com/weskoerber/kewpie/actions/workflows/test.yaml)
+[![docs](https://github.com/weskoerber/kewpie/actions/workflows/docs.yaml/badge.svg)](https://github.com/weskoerber/kewpie/actions/workflows/docs.yaml)
+
 # Kewpie
 
 A simple query string parser for zig.
