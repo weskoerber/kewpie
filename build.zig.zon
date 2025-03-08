@@ -1,7 +1,8 @@
 .{
-    .name = "kewpie",
+    .name = .kewpie,
+    .fingerprint = 0xa9dd134bb9440992,
     .version = "0.1.1",
-    .minimum_zig_version = "0.12.0",
+    .minimum_zig_version = "0.14.0",
     .dependencies = .{},
     .paths = .{""},
 }

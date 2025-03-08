@@ -13,27 +13,21 @@ pub fn build(b: *std.Build) void {
     // Tests
     const test_step = b.step("test", "Run the tests");
     const tests = b.addTest(.{
-        .optimize = optimize,
-        .target = target,
-        .root_source_file = b.path("test/root.zig"),
+        .root_module = mod,
     });
-
-    tests.root_module.addImport("kewpie", mod);
 
     const run_tests = b.addRunArtifact(tests);
     test_step.dependOn(&run_tests.step);
 
-    addDocsStep(b, .{ .target = target, .optimize = optimize });
+    addDocsStep(b, mod);
 }
 
-fn addDocsStep(b: *std.Build, options: anytype) void {
+fn addDocsStep(b: *std.Build, root_module: *std.Build.Module) void {
     const docs_step = b.step("docs", "Emit docs");
 
-    const lib = b.addStaticLibrary(.{
+    const lib = b.addLibrary(.{
         .name = "mac_address",
-        .root_source_file = b.path("lib/root.zig"),
-        .target = options.target,
-        .optimize = options.optimize,
+        .root_module = root_module,
     });
 
     const docs_install = b.addInstallDirectory(.{
