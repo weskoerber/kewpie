@@ -9,7 +9,8 @@ A simple query string parser for zig.
 
 ### Prerequisites
 
-- [zig](https://ziglang.org/download) (`0.12.0` or newer)
+- [Zig](https://ziglang.org/download) (`0.14.0` or newer)
+    - If using Zig `0.12` and `0.13`, use the [`zig-0.12`](https://github.com/weskoerber/mac_address/tree/zig-0.12) branch
 
 ### Installation
 
