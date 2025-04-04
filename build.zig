@@ -31,7 +31,7 @@ fn addDocsStep(b: *std.Build, options: anytype) void {
     const docs_step = b.step("docs", "Emit docs");
 
     const lib = b.addStaticLibrary(.{
-        .name = "mac_address",
+        .name = "kewpie",
         .root_source_file = b.path("lib/root.zig"),
         .target = options.target,
         .optimize = options.optimize,
