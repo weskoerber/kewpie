@@ -14,9 +14,11 @@ pub fn build(b: *std.Build) void {
     {
         const test_step = b.step("test", "Run the tests");
         const tests = b.addTest(.{
-            .optimize = optimize,
-            .target = target,
-            .root_source_file = b.path("test/root.zig"),
+            .root_module = b.createModule(.{
+                .root_source_file = b.path("test/root.zig"),
+                .optimize = optimize,
+                .target = target,
+            }),
         });
         tests.root_module.addImport("kewpie", mod);
 
@@ -30,11 +32,13 @@ pub fn build(b: *std.Build) void {
 fn addDocsStep(b: *std.Build, options: anytype) void {
     const docs_step = b.step("docs", "Emit docs");
 
-    const lib = b.addStaticLibrary(.{
+    const lib = b.addLibrary(.{
         .name = "kewpie",
-        .root_source_file = b.path("lib/root.zig"),
-        .target = options.target,
-        .optimize = options.optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("lib/root.zig"),
+            .optimize = options.optimize,
+            .target = options.target,
+        }),
     });
 
     const docs_install = b.addInstallDirectory(.{
